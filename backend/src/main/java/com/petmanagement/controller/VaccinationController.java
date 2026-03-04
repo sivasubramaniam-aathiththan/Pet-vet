@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,8 +67,9 @@ public class VaccinationController {
         return ResponseEntity.ok(ApiResponse.success(vaccinations));
     }
 
-    // Add vaccination
+    // Add vaccination (doctor only)
     @PostMapping
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<ApiResponse<VaccinationResponse>> addVaccination(
             @Valid @RequestBody VaccinationRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -76,8 +78,9 @@ public class VaccinationController {
         return ResponseEntity.ok(ApiResponse.success("Vaccination added successfully", vaccination));
     }
 
-    // Update vaccination
+    // Update vaccination (doctor only)
     @PutMapping("/{vaccinationId}")
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<ApiResponse<VaccinationResponse>> updateVaccination(
             @PathVariable Long vaccinationId,
             @Valid @RequestBody VaccinationRequest request,
@@ -87,8 +90,9 @@ public class VaccinationController {
         return ResponseEntity.ok(ApiResponse.success("Vaccination updated successfully", vaccination));
     }
 
-    // Delete vaccination
+    // Delete vaccination (doctor only)
     @DeleteMapping("/{vaccinationId}")
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<ApiResponse<Void>> deleteVaccination(
             @PathVariable Long vaccinationId,
             @AuthenticationPrincipal UserDetails userDetails) {

@@ -129,6 +129,10 @@ public class AppointmentService {
                         .doctorId(doctor.getUserId())
                         .doctorName(doctor.getFirstName() + " " + doctor.getLastName())
                         .doctorSpecialization(doctor.getSpecialization())
+                        .firstName(doctor.getFirstName())
+                        .lastName(doctor.getLastName())
+                        .specialization(doctor.getSpecialization())
+                        .availability(doctor.getAvailability())
                         .build())
                 .collect(Collectors.toList());
     }

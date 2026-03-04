@@ -18,13 +18,15 @@ import java.util.Map;
 /**
  * Admin Controller
  * 
- * Handles admin-only operations
- * Only accessible by ADMIN role
+ * Handles user management operations.  Doctors are also permitted to perform
+ * many of the same actions (they may create staff, view users, etc.) but
+ * cannot manage administrators themselves.
  */
+
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
 public class AdminController {
 
     private final UserService userService;
@@ -68,22 +70,25 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(trainers));
     }
 
-    // Create staff (Doctor or Trainer)
+    // Create staff (Doctor or Trainer) - both admins and doctors may create staff
     @PostMapping("/staff")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<ApiResponse<UserResponse>> createStaff(@Valid @RequestBody CreateStaffRequest request) {
         UserResponse staff = userService.createStaff(request);
         return ResponseEntity.ok(ApiResponse.success("Staff created successfully", staff));
     }
 
-    // Delete user
+    // Delete user (admin only)
     @DeleteMapping("/users/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok(ApiResponse.success("User deleted successfully"));
     }
 
-    // Toggle user status (enable/disable)
+    // Toggle user status (enable/disable) - admin only
     @PutMapping("/users/{userId}/toggle-status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<UserResponse>> toggleUserStatus(@PathVariable Long userId) {
         UserResponse user = userService.toggleUserStatus(userId);
         return ResponseEntity.ok(ApiResponse.success("User status updated", user));

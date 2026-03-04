@@ -19,6 +19,7 @@ E:\New folder\backend\src\main\java\com\petmanagement\dto\request\AdoptionPostRe
 E:\New folder\backend\src\main\java\com\petmanagement\dto\request\CreateStaffRequest.java
 E:\New folder\backend\src\main\java\com\petmanagement\entity\Vaccination.java
 E:\New folder\backend\src\main\java\com\petmanagement\service\ProductService.java
+E:\New folder\backend\src\main\java\com\petmanagement\dto\request\MedicationRequest.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\AppointmentResponse.java
 E:\New folder\backend\src\main\java\com\petmanagement\repository\ExpenseRepository.java
 E:\New folder\backend\src\main\java\com\petmanagement\controller\AppointmentController.java
@@ -29,8 +30,10 @@ E:\New folder\backend\src\main\java\com\petmanagement\dto\request\ExpenseRequest
 E:\New folder\backend\src\main\java\com\petmanagement\repository\VaccinationRepository.java
 E:\New folder\backend\src\main\java\com\petmanagement\controller\TrainerPackageController.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\UserResponse.java
+E:\New folder\backend\src\main\java\com\petmanagement\controller\MedicationController.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\VaccinationResponse.java
 E:\New folder\backend\src\main\java\com\petmanagement\service\ExpenseService.java
+E:\New folder\backend\src\main\java\com\petmanagement\dto\response\MedicationResponse.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\ProductResponse.java
 E:\New folder\backend\src\main\java\com\petmanagement\controller\PetController.java
 E:\New folder\backend\src\main\java\com\petmanagement\controller\ExpenseController.java
@@ -44,10 +47,13 @@ E:\New folder\backend\src\main\java\com\petmanagement\service\UserService.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\request\ProductRequest.java
 E:\New folder\backend\src\main\java\com\petmanagement\service\AuthService.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\TrainerPackageResponse.java
+E:\New folder\backend\src\main\java\com\petmanagement\repository\MedicationReportRepository.java
+E:\New folder\backend\src\main\java\com\petmanagement\service\MedicationService.java
 E:\New folder\backend\src\main\java\com\petmanagement\service\TrainerPackageService.java
 E:\New folder\backend\src\main\java\com\petmanagement\repository\PetRepository.java
 E:\New folder\backend\src\main\java\com\petmanagement\entity\Role.java
 E:\New folder\backend\src\main\java\com\petmanagement\service\AppointmentService.java
+E:\New folder\backend\src\main\java\com\petmanagement\entity\MedicationReport.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\request\PetRequest.java
 E:\New folder\backend\src\main\java\com\petmanagement\entity\Pet.java
 E:\New folder\backend\src\main\java\com\petmanagement\dto\response\PetResponse.java

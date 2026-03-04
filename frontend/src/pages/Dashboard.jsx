@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { adminAPI, petAPI, appointmentAPI, vaccinationAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { Link } from "react-router-dom";
 
 /**
  * Dashboard Page
@@ -119,6 +120,9 @@ const Dashboard = () => {
             <a href="/appointments" className="btn btn-primary">Book Appointment</a>
             <a href="/vaccinations" className="btn btn-primary">Vaccinations</a>
             <a href="/adoption" className="btn btn-primary">Adoption</a>
+              <Link to="/chatbot" className="btn btn-primary">Help_Chat</Link>
+
+
           </div>
         </div>
       </div>

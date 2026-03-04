@@ -6,6 +6,7 @@ import com.petmanagement.entity.Pet;
 import com.petmanagement.entity.User;
 import com.petmanagement.repository.PetRepository;
 import com.petmanagement.repository.UserRepository;
+import com.petmanagement.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +26,53 @@ public class PetService {
     private final PetRepository petRepository;
     private final UserRepository userRepository;
 
-    // Get all pets for a user
+    // Get pets accessible to user - regular users see only their own pets,
+    // doctors see pets of their patients, admins see all pets
     public List<PetResponse> getPetsByUser(Long userId) {
+        if (isDoctor(userId)) {
+            return petRepository.findPetsForDoctor(userId).stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        }
+
+        if (isAdmin(userId)) {
+            return petRepository.findAll().stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        }
+
         return petRepository.findByUserUserId(userId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
-    // Get pet by ID
+    private boolean isDoctor(Long userId) {
+        return userRepository.findById(userId)
+                .map(u -> u.getRole() == Role.DOCTOR)
+                .orElse(false);
+    }
+
+    private boolean isAdmin(Long userId) {
+        return userRepository.findById(userId)
+                .map(u -> u.getRole() == Role.ADMIN)
+                .orElse(false);
+    }
+
+    // Get pet by ID - doctors can view any pet, users only their own, admins all
     public PetResponse getPetById(Long petId, Long userId) {
-        Pet pet = petRepository.findByPetIdAndUserUserId(petId, userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found or access denied"));
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+
+        // Doctors can view any pet, admins can view all
+        if (isDoctor(userId) || isAdmin(userId)) {
+            return mapToResponse(pet);
+        }
+
+        // Regular users can only view their own pets
+        if (!pet.getUser().getUserId().equals(userId)) {
+            throw new RuntimeException("Pet not found or access denied");
+        }
+
         return mapToResponse(pet);
     }
 

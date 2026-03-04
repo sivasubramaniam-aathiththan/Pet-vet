@@ -28,6 +28,10 @@ public class AppointmentResponse {
     private Long doctorId;
     private String doctorName;
     private String doctorSpecialization;
+    private String firstName;
+    private String lastName;
+    private String specialization;
+    private String availability;
     
     // User info
     private Long userId;

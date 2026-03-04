@@ -3,6 +3,8 @@ package com.petmanagement.controller;
 import com.petmanagement.dto.request.ExpenseRequest;
 import com.petmanagement.dto.response.ApiResponse;
 import com.petmanagement.dto.response.ExpenseResponse;
+import com.petmanagement.entity.User;
+import com.petmanagement.repository.UserRepository;
 import com.petmanagement.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.List;
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final UserRepository userRepository;
 
     // Get expenses by pet
     @GetMapping("/pet/{petId}")
@@ -99,6 +102,8 @@ public class ExpenseController {
 
     // Helper method to extract user ID from UserDetails
     private Long getUserIdFromUserDetails(UserDetails userDetails) {
-        return Long.parseLong(userDetails.getUsername());
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found: " + userDetails.getUsername()));
+        return user.getUserId();
     }
 }

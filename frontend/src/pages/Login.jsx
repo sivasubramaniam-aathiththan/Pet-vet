@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
  * 
  * Handles user login
  */
+
 const Login = () => {
   const [formData, setFormData] = useState({
     username: '',

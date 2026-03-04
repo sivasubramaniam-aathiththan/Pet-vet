@@ -113,6 +113,15 @@ export const vaccinationAPI = {
   delete: (id) => api.delete(`/vaccinations/${id}`),
 };
 
+// Medication API
+export const medicationAPI = {
+  getByPet: (petId) => api.get(`/medications/pet/${petId}`),
+  getAll: () => api.get('/medications'),
+  create: (data) => api.post('/medications', data),
+  update: (id, data) => api.put(`/medications/${id}`, data),
+  delete: (id) => api.delete(`/medications/${id}`),
+};
+
 // Expense API
 export const expenseAPI = {
   getByPet: (petId) => api.get(`/expenses/pet/${petId}`),

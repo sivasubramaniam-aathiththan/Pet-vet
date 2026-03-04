@@ -19,6 +19,7 @@ import java.util.List;
  * 
  * Handles pet adoption posts
  */
+
 @RestController
 @RequestMapping("/api/adoption")
 @RequiredArgsConstructor

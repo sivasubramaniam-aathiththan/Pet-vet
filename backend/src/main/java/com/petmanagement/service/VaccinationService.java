@@ -6,6 +6,8 @@ import com.petmanagement.entity.Pet;
 import com.petmanagement.entity.Vaccination;
 import com.petmanagement.repository.PetRepository;
 import com.petmanagement.repository.VaccinationRepository;
+import com.petmanagement.repository.UserRepository;
+import com.petmanagement.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +28,17 @@ public class VaccinationService {
 
     private final VaccinationRepository vaccinationRepository;
     private final PetRepository petRepository;
+    private final UserRepository userRepository; // added for role checks
 
     // Get vaccinations by pet
     public List<VaccinationResponse> getVaccinationsByPet(Long petId, Long userId) {
+        if (isDoctor(userId)) {
+            // doctor can view records for any pet
+            return vaccinationRepository.findByPetPetId(petId).stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        }
+
         return vaccinationRepository.findByPetIdAndUserId(petId, userId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -62,8 +72,13 @@ public class VaccinationService {
     // Add vaccination record
     @Transactional
     public VaccinationResponse addVaccination(VaccinationRequest request, Long userId) {
-        Pet pet = petRepository.findByPetIdAndUserUserId(request.getPetId(), userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found or access denied"));
+        // only doctors may create records; regular users cannot
+        if (!isDoctor(userId)) {
+            throw new RuntimeException("Only doctors are allowed to create vaccination records");
+        }
+
+        Pet pet = petRepository.findById(request.getPetId())
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         Vaccination vaccination = Vaccination.builder()
                 .vaccineName(request.getVaccineName())
@@ -85,8 +100,19 @@ public class VaccinationService {
         Vaccination vaccination = vaccinationRepository.findById(vaccinationId)
                 .orElseThrow(() -> new RuntimeException("Vaccination not found"));
 
-        if (!vaccination.getPet().getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Access denied");
+        // doctors may update any record; regular users may only update their own
+        if (!isDoctor(userId)) {
+            if (!vaccination.getPet().getUser().getUserId().equals(userId)) {
+                throw new RuntimeException("Access denied");
+            }
+        }
+
+        // if doctor changed the petId we should reassign
+        if (isDoctor(userId) && request.getPetId() != null &&
+                !request.getPetId().equals(vaccination.getPet().getPetId())) {
+            Pet newPet = petRepository.findById(request.getPetId())
+                    .orElseThrow(() -> new RuntimeException("Pet not found"));
+            vaccination.setPet(newPet);
         }
 
         vaccination.setVaccineName(request.getVaccineName());
@@ -106,8 +132,10 @@ public class VaccinationService {
         Vaccination vaccination = vaccinationRepository.findById(vaccinationId)
                 .orElseThrow(() -> new RuntimeException("Vaccination not found"));
 
-        if (!vaccination.getPet().getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Access denied");
+        if (!isDoctor(userId)) {
+            if (!vaccination.getPet().getUser().getUserId().equals(userId)) {
+                throw new RuntimeException("Access denied");
+            }
         }
 
         vaccinationRepository.delete(vaccination);
@@ -132,5 +160,12 @@ public class VaccinationService {
                 .daysUntilDue((int) daysUntilDue)
                 .createdAt(vaccination.getCreatedAt())
                 .build();
+    }
+
+    // helper to check whether the user has doctor role
+    private boolean isDoctor(Long userId) {
+        return userRepository.findById(userId)
+                .map(u -> u.getRole() == Role.DOCTOR)
+                .orElse(false);
     }
 }

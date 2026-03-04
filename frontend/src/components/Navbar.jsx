@@ -32,9 +32,7 @@ const Navbar = () => {
         {/* User Links */}
         {user?.role === 'USER' && (
           <>
-            <Link to="/pets">My Pets</Link>
             <Link to="/appointments">Appointments</Link>
-            <Link to="/vaccinations">Vaccinations</Link>
             <Link to="/expenses">Expenses</Link>
             <Link to="/adoption">Adoption</Link>
             <Link to="/trainers">Trainers</Link>
