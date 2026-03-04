@@ -7,6 +7,14 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Pets from './pages/Pets';
+import AllExpenses from './pages/AllExpenses';
+import ExpensesDashboard from './pages/ExpensesDashboard';
+import Appointments from './pages/Appointments';
+import Vaccinations from './pages/Vaccinations';
+import TrainerPackages from './pages/TrainerPackages';
+import MyPackages from './pages/MyPackages';
+import DoctorAppointments from './pages/DoctorAppointments';
 
 /**
  * Main App Component
@@ -36,60 +44,60 @@ function App() {
         
         {/* User Routes */}
         <Route
-          path="/pets/*"
+          path="/pets"
           element={
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Pet Management</h1>
-                  <p>Pet CRUD operations will be implemented here</p>
-                </div>
+                <Pets />
               </>
             </ProtectedRoute>
           }
         />
         
         <Route
-          path="/appointments/*"
+          path="/pets/:petId/expenses"
           element={
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Appointments</h1>
-                  <p>Appointment booking will be implemented here</p>
-                </div>
+                <ExpensesDashboard />
               </>
             </ProtectedRoute>
           }
         />
         
         <Route
-          path="/vaccinations/*"
+          path="/appointments"
           element={
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Vaccinations</h1>
-                  <p>Vaccination management will be implemented here</p>
-                </div>
+                <Appointments />
               </>
             </ProtectedRoute>
           }
         />
         
         <Route
-          path="/expenses/*"
+          path="/vaccinations"
           element={
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Expenses</h1>
-                  <p>here expensives</p>
-                </div>
+                <Vaccinations />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/expenses"
+          element={
+            <ProtectedRoute allowedRoles={['USER']}>
+              <>
+                <Navbar />
+                <AllExpenses />
               </>
             </ProtectedRoute>
           }
@@ -111,15 +119,12 @@ function App() {
         />
         
         <Route
-          path="/trainers/*"
+          path="/trainers"
           element={
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Trainers</h1>
-                  <p>Trainer packages will be displayed here</p>
-                </div>
+                <TrainerPackages />
               </>
             </ProtectedRoute>
           }
@@ -223,10 +228,7 @@ function App() {
             <ProtectedRoute allowedRoles={['DOCTOR']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>My Appointments</h1>
-                  <p>Doctor appointments will be displayed here</p>
-                </div>
+                <DoctorAppointments />
               </>
             </ProtectedRoute>
           }
@@ -239,10 +241,7 @@ function App() {
             <ProtectedRoute allowedRoles={['TRAINER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>My Packages</h1>
-                  <p>Trainer packages management will be implemented here</p>
-                </div>
+                <MyPackages />
               </>
             </ProtectedRoute>
           }
