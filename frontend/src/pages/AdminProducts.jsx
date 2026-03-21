@@ -27,7 +27,8 @@ const AdminProducts = () => {
     imageUrl: '',
     category: '',
     brand: '',
-    price: ''
+    price: '',
+    stockQuantity: ''
   });
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const AdminProducts = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'price' ? (value ? parseFloat(value) : '') : value
+      [name]: (name === 'price' || name === 'stockQuantity') ? (value ? parseInt(value) : '') : value
     }));
   };
 
@@ -73,7 +74,8 @@ const AdminProducts = () => {
       imageUrl: '',
       category: '',
       brand: '',
-      price: ''
+      price: '',
+      stockQuantity: ''
     });
     setEditingProduct(null);
   };
@@ -87,7 +89,8 @@ const AdminProducts = () => {
       imageUrl: product.imageUrl || '',
       category: product.category || '',
       brand: product.brand || '',
-      price: product.price || ''
+      price: product.price || '',
+      stockQuantity: product.stockQuantity || 0
     });
     setShowModal(true);
   };
@@ -111,11 +114,6 @@ const AdminProducts = () => {
       return;
     }
 
-    if (!formData.externalEcommerceLink.trim()) {
-      toast.error('External e-commerce link is required');
-      return;
-    }
-
     if (formData.price && formData.price <= 0) {
       toast.error('Price must be greater than 0');
       return;
@@ -129,7 +127,8 @@ const AdminProducts = () => {
         imageUrl: formData.imageUrl,
         category: formData.category,
         brand: formData.brand,
-        price: formData.price ? parseFloat(formData.price) : null
+        price: formData.price ? parseFloat(formData.price) : null,
+        stockQuantity: formData.stockQuantity ? parseInt(formData.stockQuantity) : 0
       };
 
       if (editingProduct) {
@@ -182,9 +181,9 @@ const AdminProducts = () => {
   if (loading) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div className="spinner-container">
           <div className="spinner"></div>
-          <p>Loading products...</p>
+          <p className="loading-text">Loading products...</p>
         </div>
       </div>
     );
@@ -272,8 +271,8 @@ const AdminProducts = () => {
                   <th>Category</th>
                   <th>Brand</th>
                   <th>Price</th>
+                  <th>Stock</th>
                   <th>Status</th>
-                  <th>E-commerce Link</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -299,6 +298,7 @@ const AdminProducts = () => {
                         '-'
                       )}
                     </td>
+                    <td>{product.stockQuantity || 0}</td>
                     <td>
                       <span
                         style={{
@@ -312,21 +312,6 @@ const AdminProducts = () => {
                       >
                         {product.isActive ? '✅ Active' : '⏸️ Inactive'}
                       </span>
-                    </td>
-                    <td>
-                      <a
-                        href={product.externalEcommerceLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: '#1976d2',
-                          textDecoration: 'none',
-                          fontWeight: '500',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        View Link 🔗
-                      </a>
                     </td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -369,133 +354,147 @@ const AdminProducts = () => {
             </div>
 
             <form onSubmit={handleSubmit}>
-              {/* Product Name */}
-              <div className="form-group">
-                <label htmlFor="productName">Product Name *</label>
-                <input
-                  type="text"
-                  id="productName"
-                  name="productName"
-                  value={formData.productName}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Premium Dog Food"
-                  required
-                />
-              </div>
-
-              {/* Description */}
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="Describe the product features and benefits..."
-                  rows="3"
-                />
-              </div>
-
-              {/* E-commerce Link */}
-              <div className="form-group">
-                <label htmlFor="externalEcommerceLink">E-commerce Link *</label>
-                <input
-                  type="url"
-                  id="externalEcommerceLink"
-                  name="externalEcommerceLink"
-                  value={formData.externalEcommerceLink}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/product"
-                  required
-                />
-                <small style={{ color: '#666', marginTop: '0.25rem', display: 'block' }}>
-                  Paste the Amazon, Flipkart, or other e-commerce link here
-                </small>
-              </div>
-
-              {/* Image URL */}
-              <div className="form-group">
-                <label htmlFor="imageUrl">Image URL</label>
-                <input
-                  type="url"
-                  id="imageUrl"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/image.jpg"
-                />
-                {formData.imageUrl && (
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <img
-                      src={formData.imageUrl}
-                      alt="Preview"
-                      style={{
-                        maxWidth: '150px',
-                        maxHeight: '150px',
-                        borderRadius: '8px',
-                        border: '1px solid #ddd'
-                      }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
+              {/* Product Basic Info */}
+              <div className="form-section">
+                <h3 className="form-section-title">📦 Product Information</h3>
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="productName">Product Name *</label>
+                    <input
+                      type="text"
+                      id="productName"
+                      name="productName"
+                      value={formData.productName}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Premium Dog Food"
+                      required
                     />
                   </div>
-                )}
-              </div>
-
-              {/* Two Column Layout */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                {/* Category */}
-                <div className="form-group">
-                  <label htmlFor="category">Category</label>
-                  <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                    <option value="food">Food</option>
-                    <option value="toys">Toys</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="health">Health & Wellness</option>
-                    <option value="grooming">Grooming</option>
-                    <option value="other">Other</option>
-                  </select>
+                  <div className="form-group">
+                    <label htmlFor="category">Category</label>
+                    <select
+                      id="category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Category</option>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                      <option value="food">Food</option>
+                      <option value="toys">Toys</option>
+                      <option value="accessories">Accessories</option>
+                      <option value="health">Health & Wellness</option>
+                      <option value="grooming">Grooming</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
                 </div>
-
-                {/* Brand */}
+                
                 <div className="form-group">
-                  <label htmlFor="brand">Brand</label>
-                  <input
-                    type="text"
-                    id="brand"
-                    name="brand"
-                    value={formData.brand}
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
                     onChange={handleInputChange}
-                    placeholder="e.g., Pedigree, Royal Canin"
+                    placeholder="Describe the product features and benefits..."
+                    rows="3"
                   />
                 </div>
               </div>
 
-              {/* Price */}
-              <div className="form-group">
-                <label htmlFor="price">Price ($)</label>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0"
-                />
+              {/* Product Details */}
+              <div className="form-section">
+                <h3 className="form-section-title">🏷️ Product Details</h3>
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="brand">Brand</label>
+                    <input
+                      type="text"
+                      id="brand"
+                      name="brand"
+                      value={formData.brand}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Pedigree, Royal Canin"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="price">Price ($)</label>
+                    <input
+                      type="number"
+                      id="price"
+                      name="price"
+                      value={formData.price}
+                      onChange={handleInputChange}
+                      placeholder="0.00"
+                      step="0.01"
+                      min="0"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="stockQuantity">Stock Quantity</label>
+                    <input
+                      type="number"
+                      id="stockQuantity"
+                      name="stockQuantity"
+                      value={formData.stockQuantity}
+                      onChange={handleInputChange}
+                      placeholder="0"
+                      min="0"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="externalEcommerceLink">External Link</label>
+                    <input
+                      type="url"
+                      id="externalEcommerceLink"
+                      name="externalEcommerceLink"
+                      value={formData.externalEcommerceLink}
+                      onChange={handleInputChange}
+                      placeholder="https://example.com/product"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Media */}
+              <div className="form-section">
+                <h3 className="form-section-title">🖼️ Product Media</h3>
+                <div className="form-group">
+                  <label htmlFor="imageUrl">Image URL</label>
+                  <input
+                    type="url"
+                    id="imageUrl"
+                    name="imageUrl"
+                    value={formData.imageUrl}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  {formData.imageUrl && (
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <img
+                        src={formData.imageUrl}
+                        alt="Preview"
+                        style={{
+                          maxWidth: '150px',
+                          maxHeight: '150px',
+                          borderRadius: '8px',
+                          border: '1px solid #ddd'
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Modal Actions */}

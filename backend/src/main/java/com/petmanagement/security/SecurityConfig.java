@@ -75,6 +75,9 @@ public class SecurityConfig {
                         // Public endpoints - View active products
                         .requestMatchers(HttpMethod.GET, "/api/products/active").permitAll()
                         
+                        // Public endpoints - View product categories
+                        .requestMatchers(HttpMethod.GET, "/api/products/categories").permitAll()
+                        
                         // Admin only endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         
@@ -86,13 +89,15 @@ public class SecurityConfig {
                         
                         // User endpoints (also accessible by ADMIN)
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/pets/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/pets/**").hasAnyRole("USER", "DOCTOR", "ADMIN")
                         .requestMatchers("/api/appointments/**").hasAnyRole("USER", "DOCTOR", "ADMIN")
                         .requestMatchers("/api/vaccinations/**").hasAnyRole("USER", "DOCTOR", "ADMIN")
                         .requestMatchers("/api/medications/**").hasAnyRole("USER", "DOCTOR", "ADMIN")
                         .requestMatchers("/api/expenses/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/adoption/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/trainer-packages/**").hasAnyRole("TRAINER", "USER", "ADMIN")
+                        .requestMatchers("/api/cart/**").hasAnyRole("USER", "DOCTOR", "TRAINER", "ADMIN")
+                        .requestMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/products/**").hasAnyRole("ADMIN")
                         
                         // All other requests require authentication

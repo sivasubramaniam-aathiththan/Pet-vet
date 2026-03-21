@@ -183,9 +183,9 @@ const Expenses = () => {
   if (loading) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div className="spinner-container">
           <div className="spinner"></div>
-          <p>Loading expenses...</p>
+          <p className="loading-text">Loading expenses...</p>
         </div>
       </div>
     );

@@ -17,7 +17,6 @@ public class ProductRequest {
     
     private String description;
     
-    @NotBlank(message = "External link is required")
     private String externalEcommerceLink;
     
     private String imageUrl;
@@ -26,4 +25,6 @@ public class ProductRequest {
     
     @Positive(message = "Price must be positive")
     private Double price;
+    
+    private Integer stockQuantity;
 }

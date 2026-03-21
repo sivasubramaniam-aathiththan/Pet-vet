@@ -57,6 +57,9 @@ public class TrainerPackage {
     @Column(name = "training_type")
     private String trainingType; // obedience, agility, behavioral, etc.
 
+    @Column(name = "mobile_number")
+    private String mobileNumber; // Trainer-specific mobile number for this package
+
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 

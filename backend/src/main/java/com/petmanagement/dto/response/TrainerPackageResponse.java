@@ -18,6 +18,7 @@ public class TrainerPackageResponse {
     private Double price;
     private String petType;
     private String trainingType;
+    private String mobileNumber;
     private Boolean isActive;
     
     // Trainer info

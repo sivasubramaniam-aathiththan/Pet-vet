@@ -3,6 +3,8 @@ package com.petmanagement.controller;
 import com.petmanagement.dto.request.AppointmentRequest;
 import com.petmanagement.dto.response.ApiResponse;
 import com.petmanagement.dto.response.AppointmentResponse;
+import com.petmanagement.dto.response.MedicalHistoryResponse;
+import com.petmanagement.dto.response.PetResponse;
 import com.petmanagement.entity.User;
 import com.petmanagement.repository.UserRepository;
 import com.petmanagement.service.AppointmentService;
@@ -52,6 +54,25 @@ public class AppointmentController {
         Long doctorId = getUserIdFromUserDetails(userDetails);
         List<AppointmentResponse> appointments = appointmentService.getAppointmentsByDoctor(doctorId);
         return ResponseEntity.ok(ApiResponse.success(appointments));
+    }
+
+    // Get doctor's patients (unique pets from appointments)
+    @GetMapping("/doctor/patients")
+    public ResponseEntity<ApiResponse<List<PetResponse>>> getDoctorPatients(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long doctorId = getUserIdFromUserDetails(userDetails);
+        List<PetResponse> patients = appointmentService.getDoctorPatients(doctorId);
+        return ResponseEntity.ok(ApiResponse.success(patients));
+    }
+
+    // Get medical history for a pet (vaccinations and medications) - for doctors
+    @GetMapping("/doctor/patients/{petId}/medical-history")
+    public ResponseEntity<ApiResponse<MedicalHistoryResponse>> getMedicalHistory(
+            @PathVariable Long petId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long doctorId = getUserIdFromUserDetails(userDetails);
+        MedicalHistoryResponse history = appointmentService.getMedicalHistory(petId, doctorId);
+        return ResponseEntity.ok(ApiResponse.success(history));
     }
 
     // Get upcoming appointments for user

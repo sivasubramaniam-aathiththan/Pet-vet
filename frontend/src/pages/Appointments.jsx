@@ -185,9 +185,9 @@ const Appointments = () => {
   if (loading) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div className="spinner-container">
           <div className="spinner"></div>
-          <p>Loading appointments...</p>
+          <p className="loading-text">Loading appointments...</p>
         </div>
       </div>
     );
@@ -310,18 +310,7 @@ const Appointments = () => {
                       <td>{formatTime(appointment.appointmentTime)}</td>
                       <td>{appointment.reason || '-'}</td>
                       <td>
-                        <span 
-                          className="status-badge"
-                          style={{
-                            backgroundColor: statusStyle.bg,
-                            color: statusStyle.color,
-                            border: `1px solid ${statusStyle.border}`,
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '12px',
-                            fontSize: '0.85rem',
-                            fontWeight: '500'
-                          }}
-                        >
+                        <span className={`status-badge ${appointment.status.toLowerCase()}`}>
                           {appointment.status}
                         </span>
                       </td>
@@ -353,71 +342,82 @@ const Appointments = () => {
               <button className="modal-close" onClick={closeModal}>&times;</button>
             </div>
             
-            {selectedDoctor && (
-              <div style={{ padding: '1rem', background: '#f8f9fa', borderRadius: '8px', marginBottom: '1rem' }}>
-                <p style={{ margin: 0 }}>
-                  <strong>Doctor:</strong> Dr. {selectedDoctor.firstName} {selectedDoctor.lastName}
-                </p>
-                <p style={{ margin: '0.5rem 0 0 0', color: '#666' }}>
-                  {selectedDoctor.specialization || 'General Veterinarian'}
-                </p>
-              </div>
-            )}
-            
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="petId">Select Pet *</label>
-                <select
-                  id="petId"
-                  name="petId"
-                  value={formData.petId}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Choose your pet</option>
-                  {pets.map(pet => (
-                    <option key={pet.petId} value={pet.petId}>
-                      {pet.petName} ({pet.breed})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* Doctor Info Display */}
+              {selectedDoctor && (
+                <div className="doctor-info-card">
+                  <div className="doctor-info-header">
+                    <div className="doctor-avatar">
+                      {selectedDoctor.firstName.charAt(0)}{selectedDoctor.lastName.charAt(0)}
+                    </div>
+                    <div>
+                      <h4>Dr. {selectedDoctor.firstName} {selectedDoctor.lastName}</h4>
+                      <p>{selectedDoctor.specialization || 'General Veterinarian'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-              <div className="form-group">
-                <label htmlFor="appointmentDate">Appointment Date *</label>
-                <input
-                  type="date"
-                  id="appointmentDate"
-                  name="appointmentDate"
-                  value={formData.appointmentDate}
-                  onChange={handleInputChange}
-                  min={new Date().toISOString().split('T')[0]}
-                  required
-                />
-              </div>
+              {/* Appointment Details */}
+              <div className="form-section">
+                <h3 className="form-section-title">📅 Appointment Details</h3>
+                
+                <div className="form-group">
+                  <label htmlFor="petId">Select Pet *</label>
+                  <select
+                    id="petId"
+                    name="petId"
+                    value={formData.petId}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Choose your pet</option>
+                    {pets.map(pet => (
+                      <option key={pet.petId} value={pet.petId}>
+                        {pet.petName} ({pet.breed})
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="appointmentTime">Appointment Time *</label>
-                <input
-                  type="time"
-                  id="appointmentTime"
-                  name="appointmentTime"
-                  value={formData.appointmentTime}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="appointmentDate">Appointment Date *</label>
+                    <input
+                      type="date"
+                      id="appointmentDate"
+                      name="appointmentDate"
+                      value={formData.appointmentDate}
+                      onChange={handleInputChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="appointmentTime">Appointment Time *</label>
+                    <input
+                      type="time"
+                      id="appointmentTime"
+                      name="appointmentTime"
+                      value={formData.appointmentTime}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="reason">Reason for Visit</label>
-                <textarea
-                  id="reason"
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleInputChange}
-                  rows="3"
-                  placeholder="Describe the reason for this appointment..."
-                />
+                <div className="form-group">
+                  <label htmlFor="reason">Reason for Visit</label>
+                  <textarea
+                    id="reason"
+                    name="reason"
+                    value={formData.reason}
+                    onChange={handleInputChange}
+                    rows="3"
+                    placeholder="Describe the reason for this appointment..."
+                  />
+                </div>
               </div>
 
               <div className="modal-actions">

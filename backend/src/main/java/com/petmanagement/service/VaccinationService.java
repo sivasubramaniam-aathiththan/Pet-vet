@@ -51,6 +51,19 @@ public class VaccinationService {
                 .collect(Collectors.toList());
     }
 
+    // Get all vaccinations for doctor's patients (from their appointments)
+    public List<VaccinationResponse> getDoctorPatientVaccinations(Long doctorId) {
+        // Get pets from doctor's appointments
+        List<Pet> doctorPets = petRepository.findPetsForDoctor(doctorId);
+        List<Long> petIds = doctorPets.stream().map(Pet::getPetId).collect(Collectors.toList());
+        
+        // Get vaccinations for all those pets
+        return petIds.stream()
+                .flatMap(petId -> vaccinationRepository.findByPetPetId(petId).stream())
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     // Get vaccinations due soon (within 7 days)
     public List<VaccinationResponse> getVaccinationsDueSoon(Long userId) {
         LocalDate today = LocalDate.now();

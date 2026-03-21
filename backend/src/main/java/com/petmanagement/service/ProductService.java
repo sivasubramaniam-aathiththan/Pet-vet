@@ -68,6 +68,7 @@ public class ProductService {
                 .category(request.getCategory())
                 .brand(request.getBrand())
                 .price(request.getPrice())
+                .stockQuantity(request.getStockQuantity() != null ? request.getStockQuantity() : 0)
                 .isActive(true)
                 .build();
 
@@ -88,6 +89,8 @@ public class ProductService {
         product.setCategory(request.getCategory());
         product.setBrand(request.getBrand());
         product.setPrice(request.getPrice());
+        // Always update stockQuantity (even if it's 0)
+        product.setStockQuantity(request.getStockQuantity() != null ? request.getStockQuantity() : 0);
 
         product = productRepository.save(product);
         return mapToResponse(product);
@@ -128,6 +131,7 @@ public class ProductService {
                 .category(product.getCategory())
                 .brand(product.getBrand())
                 .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
                 .isActive(product.getIsActive())
                 .createdAt(product.getCreatedAt())
                 .build();

@@ -41,8 +41,7 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @NotBlank(message = "External link is required")
-    @Column(name = "external_link", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "external_link", columnDefinition = "TEXT")
     private String externalEcommerceLink;
 
     @Column(name = "image_url", columnDefinition = "TEXT")
@@ -57,6 +56,11 @@ public class Product {
     @Positive(message = "Price must be positive")
     @Column(name = "price")
     private Double price;
+
+    // Inventory management
+    @Column(name = "stock_quantity", nullable = false)
+    @Builder.Default
+    private Integer stockQuantity = 0;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;

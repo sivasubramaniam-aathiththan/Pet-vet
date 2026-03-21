@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 /**
  * Login Page
  * 
- * Handles user login
+ * Handles user login with professional styling
  */
 
 const Login = () => {
@@ -39,11 +39,12 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">🐾 Pet Vet</h2>
-        <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#666' }}>
-          Login to Your Account
-        </h3>
+      <div className="auth-card animate-scaleIn">
+        <div className="auth-header">
+          <div className="auth-logo">🐾</div>
+          <h1 className="auth-title">PetCare</h1>
+          <p className="auth-subtitle">Welcome back! Please login to continue.</p>
+        </div>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -78,13 +79,13 @@ const Login = () => {
             style={{ width: '100%', marginTop: '1rem' }}
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Logging in...' : '🚀 Login'}
           </button>
         </form>
         
-        <div className="auth-links">
+        <div className="auth-footer">
           <p>
-            Don't have an account? <Link to="/register">Register here</Link>
+            Don't have an account? <Link to="/register">Create one now</Link>
           </p>
         </div>
       </div>

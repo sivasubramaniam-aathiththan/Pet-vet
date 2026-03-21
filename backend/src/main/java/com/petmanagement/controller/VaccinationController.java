@@ -49,6 +49,15 @@ public class VaccinationController {
         return ResponseEntity.ok(ApiResponse.success(vaccinations));
     }
 
+    // Get all vaccinations for doctor's patients (from their appointments)
+    @GetMapping("/doctor")
+    public ResponseEntity<ApiResponse<List<VaccinationResponse>>> getDoctorPatientVaccinations(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long doctorId = getUserIdFromUserDetails(userDetails);
+        List<VaccinationResponse> vaccinations = vaccinationService.getDoctorPatientVaccinations(doctorId);
+        return ResponseEntity.ok(ApiResponse.success(vaccinations));
+    }
+
     // Get vaccinations due soon
     @GetMapping("/due-soon")
     public ResponseEntity<ApiResponse<List<VaccinationResponse>>> getVaccinationsDueSoon(

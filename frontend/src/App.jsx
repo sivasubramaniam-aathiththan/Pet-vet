@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 // Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Pets from './pages/Pets';
 import AllExpenses from './pages/AllExpenses';
@@ -20,6 +21,12 @@ import AdminProducts from './pages/AdminProducts';
 import Medications from './pages/Medications';
 import DoctorRecords from './pages/DoctorRecords';
 import Chatbot from "./pages/Chatbot";
+import Cart from './pages/Cart';
+import Orders from './pages/Orders';
+import AdminOrders from './pages/AdminOrders';
+import AdminUsers from './pages/AdminUsers';
+import AdminDoctors from './pages/AdminDoctors';
+import AdminTrainers from './pages/AdminTrainers';
 
 /**
  * Main App Component
@@ -31,6 +38,7 @@ function App() {
     <AuthProvider>
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
@@ -41,7 +49,9 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Dashboard />
+                <div className="page-wrapper">
+                  <Dashboard />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -54,7 +64,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <Pets />
+                <div className="page-wrapper">
+                  <Pets />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -66,7 +78,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <ExpensesDashboard />
+                <div className="page-wrapper">
+                  <ExpensesDashboard />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -78,7 +92,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <Appointments />
+                <div className="page-wrapper">
+                  <Appointments />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -90,7 +106,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER','DOCTOR']}>
               <>
                 <Navbar />
-                <Vaccinations />
+                <div className="page-wrapper">
+                  <Vaccinations />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -101,7 +119,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER','DOCTOR']}>
               <>
                 <Navbar />
-                <Medications />
+                <div className="page-wrapper">
+                  <Medications />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -112,7 +132,9 @@ function App() {
             <ProtectedRoute allowedRoles={['DOCTOR']}>
               <>
                 <Navbar />
-                <DoctorRecords />
+                <div className="page-wrapper">
+                  <DoctorRecords />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -124,7 +146,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <AllExpenses />
+                <div className="page-wrapper">
+                  <AllExpenses />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -136,9 +160,20 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Pet Adoption</h1>
-                  <p>Adoption posts will be implemented here</p>
+                <div className="page-wrapper">
+                  <div className="container">
+                    <div className="card">
+                      <div className="card-header">
+                        <h2 className="card-title">🏠 Pet Adoption</h2>
+                      </div>
+                      <p className="text-muted">Adoption features coming soon...</p>
+                      <div className="empty-state" style={{ padding: '2rem' }}>
+                        <div className="empty-state-icon">🐕</div>
+                        <h3 className="empty-state-title">Coming Soon</h3>
+                        <p className="empty-state-description">Find your perfect pet companion through our adoption program.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             </ProtectedRoute>
@@ -151,7 +186,9 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <TrainerPackages />
+                <div className="page-wrapper">
+                  <TrainerPackages />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -163,7 +200,37 @@ function App() {
             <ProtectedRoute allowedRoles={['USER']}>
               <>
                 <Navbar />
-                <Products />
+                <div className="page-wrapper">
+                  <Products />
+                </div>
+              </>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute allowedRoles={['USER']}>
+              <>
+                <Navbar />
+                <div className="page-wrapper">
+                  <Cart />
+                </div>
+              </>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute allowedRoles={['USER']}>
+              <>
+                <Navbar />
+                <div className="page-wrapper">
+                  <Orders />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -179,9 +246,8 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>User Management</h1>
-                  <p>User jnm</p>
+                <div className="page-wrapper">
+                  <AdminUsers />
                 </div>
               </>
             </ProtectedRoute>
@@ -194,9 +260,8 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Doctor Management</h1>
-                  <p>Doctor mj</p>
+                <div className="page-wrapper">
+                  <AdminDoctors />
                 </div>
               </>
             </ProtectedRoute>
@@ -209,9 +274,8 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Trainer Management</h1>
-                  <p>Trainer management here</p>
+                <div className="page-wrapper">
+                  <AdminTrainers />
                 </div>
               </>
             </ProtectedRoute>
@@ -224,9 +288,13 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}>
               <>
                 <Navbar />
-                <div className="container">
-                  <h1>Adoption Post Review</h1>
-                  <p>Adoption post review will be implemented here</p>
+                <div className="page-wrapper">
+                  <div className="container">
+                    <div className="card">
+                      <h2 className="card-title">🏠 Adoption Post Review</h2>
+                      <p className="text-muted">Adoption post review features coming soon...</p>
+                    </div>
+                  </div>
                 </div>
               </>
             </ProtectedRoute>
@@ -239,7 +307,23 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <>
                 <Navbar />
-                <AdminProducts />
+                <div className="page-wrapper">
+                  <AdminProducts />
+                </div>
+              </>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <>
+                <Navbar />
+                <div className="page-wrapper">
+                  <AdminOrders />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -252,7 +336,9 @@ function App() {
             <ProtectedRoute allowedRoles={['DOCTOR']}>
               <>
                 <Navbar />
-                <DoctorAppointments />
+                <div className="page-wrapper">
+                  <DoctorAppointments />
+                </div>
               </>
             </ProtectedRoute>
           }
@@ -265,14 +351,16 @@ function App() {
             <ProtectedRoute allowedRoles={['TRAINER']}>
               <>
                 <Navbar />
-                <MyPackages />
+                <div className="page-wrapper">
+                  <MyPackages />
+                </div>
               </>
             </ProtectedRoute>
           }
         />
         
         {/* Default Route */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </AuthProvider>

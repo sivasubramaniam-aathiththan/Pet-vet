@@ -26,9 +26,8 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     // Count pets by user
     long countByUserUserId(Long userId);
 
-    // Find all pets belonging to users who have appointments with a given doctor
-    @Query("SELECT DISTINCT p FROM Pet p JOIN p.user u JOIN Appointment a ON a.user.userId = u.userId " +
-           "WHERE a.doctor.userId = :doctorId")
+    // Find all pets from appointments with a given doctor
+    @Query("SELECT DISTINCT a.pet FROM Appointment a WHERE a.doctor.userId = :doctorId")
     List<Pet> findPetsForDoctor(@Param("doctorId") Long doctorId);
     
     // Find pets by breed

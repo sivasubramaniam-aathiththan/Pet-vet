@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
-import { productAPI } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { productAPI, cartAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
 /**
  * Products Page
  * 
- * Displays pet products recommended by admin
- * Users can view products and click external e-commerce links
+ * Displays pet products available for purchase
+ * Users can add products to cart and place orders
  */
 const Products = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [addingToCart, setAddingToCart] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -75,8 +78,55 @@ const Products = () => {
   };
 
   const openProduct = (product) => {
-    if (product.externalEcommerceLink) {
-      window.open(product.externalEcommerceLink, '_blank');
+    // External link functionality removed - products are now managed internally
+    console.log('View product:', product.productName);
+  };
+
+  const handleAddToCart = async (product) => {
+    // Only check stock if stock quantity is explicitly set and > 0
+    const stock = product.stockQuantity;
+    if (stock !== null && stock !== undefined && stock <= 0) {
+      toast.error('This product is out of stock');
+      return;
+    }
+    try {
+      setAddingToCart(product.productId);
+      console.log('Adding to cart:', { productId: product.productId, quantity: 1 });
+      const response = await cartAPI.addToCart({
+        productId: product.productId,
+        quantity: 1
+      });
+      console.log('Add to cart response:', response);
+      
+      // Show success message
+      toast.success(`${product.productName} added to cart!`);
+      
+      // Redirect to cart after adding
+      setTimeout(() => {
+        navigate('/cart');
+      }, 500);
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      console.error('Error response:', error.response);
+      
+      // Try to get error message from different possible locations
+      let errorMessage = 'Failed to add to cart';
+      if (error.response) {
+        // Server responded with error
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.status === 401) {
+          errorMessage = 'Please login to add items to cart';
+        } else if (error.response.status === 403) {
+          errorMessage = 'You do not have permission to add items to cart';
+        }
+      } else if (error.request) {
+        // Request made but no response
+        errorMessage = 'Server not responding. Please try again.';
+      }
+      toast.error(errorMessage);
+    } finally {
+      setAddingToCart(null);
     }
   };
 
@@ -97,7 +147,7 @@ const Products = () => {
         <div>
           <h1>🛍️ Pet Products</h1>
           <p style={{ color: '#666', marginTop: '0.5rem' }}>
-            Discover recommended pet products from trusted e-commerce partners
+            Browse and purchase pet products for your furry friends
           </p>
         </div>
       </div>
@@ -117,37 +167,31 @@ const Products = () => {
       </div>
 
       {/* Search and Filter */}
-      <div className="card">
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-          <div style={{ flex: '1', minWidth: '250px' }}>
-            <label htmlFor="search" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+      <div className="filter-card">
+        <div className="filter-row">
+          <div className="search-wrapper">
+            <label htmlFor="search" className="filter-label">
               Search Products
             </label>
             <input
               id="search"
               type="text"
+              className="search-input"
               placeholder="Search by name, brand, or description..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                borderRadius: '8px',
-                border: '1px solid #ddd',
-                fontSize: '1rem'
-              }}
             />
           </div>
         </div>
 
         {/* Category Filter */}
         <div style={{ marginTop: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+          <label className="filter-label">
             Filter by Category
           </label>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <div className="category-filters">
             <button
-              className={`btn ${selectedCategory === 'ALL' ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+              className={`category-filter-btn ${selectedCategory === 'ALL' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('ALL')}
             >
               All Products
@@ -155,7 +199,7 @@ const Products = () => {
             {categories.map(category => (
               <button
                 key={category}
-                className={`btn ${selectedCategory === category ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+                className={`category-filter-btn ${selectedCategory === category ? 'active' : ''}`}
                 onClick={() => handleCategoryChange(category)}
               >
                 {category}
@@ -166,7 +210,7 @@ const Products = () => {
       </div>
 
       {/* Products Grid */}
-      <div className="card">
+      <div className="card" style={{ padding: 0, boxShadow: 'none', background: 'transparent' }}>
         {filteredProducts.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2rem' }}>
             <p style={{ fontSize: '1.1rem', color: '#666' }}>
@@ -301,14 +345,41 @@ const Products = () => {
                     </div>
                   )}
 
-                  {/* View Product Button */}
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => openProduct(product)}
-                    style={{ marginTop: '1rem', width: '100%' }}
-                  >
-                    View on Store 🔗
-                  </button>
+                  {/* Stock Info */}
+                  {(() => {
+                    const stock = product.stockQuantity;
+                    // Only show stock info if stock quantity is explicitly set
+                    if (stock === null || stock === undefined) {
+                      return (
+                        <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
+                          ✓ Available
+                        </p>
+                      );
+                    }
+                    return (
+                      <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: stock > 0 ? '#4caf50' : '#f44336' }}>
+                        {stock > 0 ? `✓ In Stock (${stock} available)` : '✗ Out of Stock'}
+                      </p>
+                    );
+                  })()}
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', position: 'relative', zIndex: 1 }}>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Button clicked for product:', product.productId);
+                        handleAddToCart(product);
+                      }}
+                      disabled={addingToCart === product.productId || (product.stockQuantity !== null && product.stockQuantity !== undefined && product.stockQuantity <= 0)}
+                      style={{ flex: 1, position: 'relative', zIndex: 10 }}
+                    >
+                      {addingToCart === product.productId ? 'Adding...' : 'Add to Cart 🛒'}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

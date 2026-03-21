@@ -52,6 +52,7 @@ public class TrainerPackageService {
                 .price(request.getPrice())
                 .petType(request.getPetType())
                 .trainingType(request.getTrainingType())
+                .mobileNumber(request.getMobileNumber())
                 .isActive(true)
                 .trainer(trainer)
                 .build();
@@ -76,6 +77,7 @@ public class TrainerPackageService {
         pkg.setPrice(request.getPrice());
         pkg.setPetType(request.getPetType());
         pkg.setTrainingType(request.getTrainingType());
+        pkg.setMobileNumber(request.getMobileNumber());
 
         pkg = trainerPackageRepository.save(pkg);
         return mapToResponse(pkg);
@@ -119,6 +121,7 @@ public class TrainerPackageService {
                 .price(pkg.getPrice())
                 .petType(pkg.getPetType())
                 .trainingType(pkg.getTrainingType())
+                .mobileNumber(pkg.getMobileNumber())
                 .isActive(pkg.getIsActive())
                 .trainerId(pkg.getTrainer().getUserId())
                 .trainerName(pkg.getTrainer().getFirstName() + " " + pkg.getTrainer().getLastName())

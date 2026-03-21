@@ -19,13 +19,16 @@ const MyPackages = () => {
   const [editingPackage, setEditingPackage] = useState(null);
   const [formData, setFormData] = useState({
     packageName: '',
-    packageType: '',
+    trainingType: '',
+    petType: '',
     duration: '',
     price: '',
-    description: ''
+    description: '',
+    mobileNumber: ''
   });
 
-  const packageTypes = ['BASIC', 'OBEDIENCE', 'AGILITY', 'BEHAVIORAL', 'ADVANCED', 'SPECIALIZED'];
+  const trainingTypes = ['OBEDIENCE', 'AGILITY', 'BEHAVIORAL', 'BASIC', 'ADVANCED', 'SPECIALIZED'];
+  const petTypes = ['DOG', 'CAT', 'BIRD', 'ALL'];
 
   useEffect(() => {
     fetchPackages();
@@ -58,10 +61,12 @@ const MyPackages = () => {
     try {
       const packageData = {
         packageName: formData.packageName,
-        packageType: formData.packageType,
+        trainingType: formData.trainingType,
+        petType: formData.petType,
         duration: formData.duration,
         price: parseFloat(formData.price),
-        description: formData.description
+        description: formData.description,
+        mobileNumber: formData.mobileNumber
       };
 
       if (editingPackage) {
@@ -85,10 +90,12 @@ const MyPackages = () => {
     setEditingPackage(pkg);
     setFormData({
       packageName: pkg.packageName || '',
-      packageType: pkg.packageType || '',
+      trainingType: pkg.trainingType || '',
+      petType: pkg.petType || '',
       duration: pkg.duration || '',
       price: pkg.price || '',
-      description: pkg.description || ''
+      description: pkg.description || '',
+      mobileNumber: pkg.mobileNumber || ''
     });
     setShowModal(true);
   };
@@ -122,10 +129,12 @@ const MyPackages = () => {
   const resetForm = () => {
     setFormData({
       packageName: '',
-      packageType: '',
+      trainingType: '',
+      petType: '',
       duration: '',
       price: '',
-      description: ''
+      description: '',
+      mobileNumber: ''
     });
     setEditingPackage(null);
   };
@@ -226,7 +235,7 @@ const MyPackages = () => {
                     <td><strong>{pkg.packageName}</strong></td>
                     <td>
                       <span className="category-badge">
-                        {pkg.packageType}
+                        {pkg.trainingType}
                       </span>
                     </td>
                     <td>{pkg.duration}</td>
@@ -286,20 +295,37 @@ const MyPackages = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="packageType">Package Type *</label>
-                <select
-                  id="packageType"
-                  name="packageType"
-                  value={formData.packageType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select type</option>
-                  {packageTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label htmlFor="trainingType">Training Type *</label>
+                  <select
+                    id="trainingType"
+                    name="trainingType"
+                    value={formData.trainingType}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select type</option>
+                    {trainingTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="petType">Pet Type</label>
+                  <select
+                    id="petType"
+                    name="petType"
+                    value={formData.petType}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select pet type</option>
+                    {petTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="form-grid">
@@ -342,6 +368,19 @@ const MyPackages = () => {
                   rows="4"
                   placeholder="Describe what this package includes..."
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="mobileNumber">Mobile Number</label>
+                <input
+                  type="tel"
+                  id="mobileNumber"
+                  name="mobileNumber"
+                  value={formData.mobileNumber}
+                  onChange={handleInputChange}
+                  placeholder="e.g., +94771234567"
+                />
+                <small style={{ color: '#666' }}>Customers can contact you through this number</small>
               </div>
 
               <div className="modal-actions">

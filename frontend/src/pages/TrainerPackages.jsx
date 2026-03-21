@@ -44,7 +44,7 @@ const TrainerPackages = () => {
 
   const filteredPackages = selectedCategory === 'ALL'
     ? packages
-    : packages.filter(pkg => pkg.packageType === selectedCategory);
+    : packages.filter(pkg => pkg.trainingType === selectedCategory);
 
   if (loading) {
     return (
@@ -84,15 +84,17 @@ const TrainerPackages = () => {
         </div>
       </div>
 
+      {/* Search and Filter */}
+      <div className="filter-card">
+
       {/* Category Filter */}
-      <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           <label style={{ fontWeight: '500' }}>Filter by Category:</label>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <div className="category-filters">
             {categories.map(cat => (
               <button
                 key={cat}
-                className={`btn ${selectedCategory === cat ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+                className={`category-filter-btn ${selectedCategory === cat ? 'active' : ''}`}
                 onClick={() => setSelectedCategory(cat)}
               >
                 {cat}
@@ -104,23 +106,24 @@ const TrainerPackages = () => {
 
       {/* Packages Grid */}
       {filteredPackages.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
+        <div className="empty-state">
+          <div className="empty-state-icon">🎓</div>
           <h3>No Packages Available</h3>
-          <p style={{ color: '#999' }}>
+          <p>
             {selectedCategory === 'ALL' 
               ? 'No training packages are currently available.' 
               : `No packages in ${selectedCategory} category.`}
           </p>
         </div>
       ) : (
-        <div className="packages-grid">
+        <div className="items-grid">
           {filteredPackages.map((pkg) => (
             <div key={pkg.packageId} className="package-card">
               <div className="package-header">
                 <div className="package-icon">🎓</div>
                 <div>
                   <h3>{pkg.packageName}</h3>
-                  <p className="package-type">{pkg.packageType}</p>
+                  <p className="package-type">{pkg.trainingType}</p>
                 </div>
               </div>
 
@@ -139,6 +142,10 @@ const TrainerPackages = () => {
                   <span className="detail-icon">💰</span>
                   <span><strong>Price:</strong> {formatCurrency(pkg.price)}</span>
                 </div>
+                <div className="package-detail-item">
+                  <span className="detail-icon">📱</span>
+                  <span><strong>Contact:</strong> {pkg.mobileNumber || pkg.trainerPhone || 'N/A'}</span>
+                </div>
               </div>
 
               {pkg.description && (
@@ -151,8 +158,11 @@ const TrainerPackages = () => {
                 <button 
                   className="btn btn-primary"
                   onClick={() => {
-                    toast.info(`Contact trainer: ${pkg.trainerName}`);
-                    // You can add contact functionality here
+                    if (pkg.mobileNumber) {
+                      window.open(`tel:${pkg.mobileNumber}`);
+                    } else {
+                      toast.info(`Contact trainer: ${pkg.trainerName}`);
+                    }
                   }}
                 >
                   Contact Trainer

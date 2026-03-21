@@ -26,4 +26,5 @@ public class TrainerPackageRequest {
     
     private String petType;
     private String trainingType;
+    private String mobileNumber;
 }

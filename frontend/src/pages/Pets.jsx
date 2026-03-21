@@ -176,7 +176,8 @@ const Pets = () => {
       </div>
 
       {pets.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
+        <div className="empty-state">
+          <div className="empty-state-icon">🐾</div>
           <h3>No Pets Yet</h3>
           <p>Start by adding your first pet!</p>
           <button className="btn btn-primary" onClick={openAddModal}>
@@ -184,7 +185,7 @@ const Pets = () => {
           </button>
         </div>
       ) : (
-        <div className="pets-grid">
+        <div className="items-grid">
           {pets.map((pet) => (
             <div key={pet.petId} className="pet-card">
               <div className="pet-image">
@@ -247,132 +248,146 @@ const Pets = () => {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{editingPet ? 'Edit Pet' : 'Add New Pet'}</h2>
+              <h2>{editingPet ? '✏️ Edit Pet' : '➕ Add New Pet'}</h2>
               <button className="modal-close" onClick={closeModal}>&times;</button>
             </div>
             
             <form onSubmit={handleSubmit}>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="petName">Pet Name *</label>
-                  <input
-                    type="text"
-                    id="petName"
-                    name="petName"
-                    value={formData.petName}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter pet name"
-                  />
-                </div>
+              {/* Basic Information */}
+              <div className="form-section">
+                <h3 className="form-section-title">🐾 Basic Information</h3>
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="petName">Pet Name *</label>
+                    <input
+                      type="text"
+                      id="petName"
+                      name="petName"
+                      value={formData.petName}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter pet name"
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="dateOfBirth">Date of Birth *</label>
-                  <input
-                    type="date"
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="dateOfBirth">Date of Birth *</label>
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="breed">Breed *</label>
-                  <input
-                    type="text"
-                    id="breed"
-                    name="breed"
-                    value={formData.breed}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="e.g., Golden Retriever"
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="breed">Breed *</label>
+                    <input
+                      type="text"
+                      id="breed"
+                      name="breed"
+                      value={formData.breed}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="e.g., Golden Retriever"
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="species">Species</label>
-                  <select
-                    id="species"
-                    name="species"
-                    value={formData.species}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select species</option>
-                    <option value="Dog">Dog</option>
-                    <option value="Cat">Cat</option>
-                    <option value="Bird">Bird</option>
-                    <option value="Rabbit">Rabbit</option>
-                    <option value="Hamster">Hamster</option>
-                    <option value="Fish">Fish</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="gender">Gender</label>
-                  <select
-                    id="gender"
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="color">Color</label>
-                  <input
-                    type="text"
-                    id="color"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Brown, White"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="weight">Weight (kg)</label>
-                  <input
-                    type="number"
-                    id="weight"
-                    name="weight"
-                    value={formData.weight}
-                    onChange={handleInputChange}
-                    step="0.1"
-                    min="0"
-                    placeholder="e.g., 25.5"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="petImage">Pet Image URL</label>
-                  <input
-                    type="url"
-                    id="petImage"
-                    name="petImage"
-                    value={formData.petImage}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <div className="form-group">
+                    <label htmlFor="species">Species</label>
+                    <select
+                      id="species"
+                      name="species"
+                      value={formData.species}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select species</option>
+                      <option value="Dog">Dog</option>
+                      <option value="Cat">Cat</option>
+                      <option value="Bird">Bird</option>
+                      <option value="Rabbit">Rabbit</option>
+                      <option value="Hamster">Hamster</option>
+                      <option value="Fish">Fish</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="notes">Notes</label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  rows="3"
-                  placeholder="Any additional information about your pet..."
-                />
+              {/* Physical Characteristics */}
+              <div className="form-section">
+                <h3 className="form-section-title">📏 Physical Characteristics</h3>
+                <div className="grid grid-2">
+                  <div className="form-group">
+                    <label htmlFor="gender">Gender</label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="color">Color</label>
+                    <input
+                      type="text"
+                      id="color"
+                      name="color"
+                      value={formData.color}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Brown, White"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="weight">Weight (kg)</label>
+                    <input
+                      type="number"
+                      id="weight"
+                      name="weight"
+                      value={formData.weight}
+                      onChange={handleInputChange}
+                      step="0.1"
+                      min="0"
+                      placeholder="e.g., 25.5"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="petImage">Pet Image URL</label>
+                    <input
+                      type="url"
+                      id="petImage"
+                      name="petImage"
+                      value={formData.petImage}
+                      onChange={handleInputChange}
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Information */}
+              <div className="form-section">
+                <h3 className="form-section-title">📝 Additional Information</h3>
+                <div className="form-group">
+                  <label htmlFor="notes">Notes</label>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    rows="3"
+                    placeholder="Any additional information about your pet..."
+                  />
+                </div>
               </div>
 
               <div className="modal-actions">

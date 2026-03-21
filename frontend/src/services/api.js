@@ -170,6 +170,25 @@ export const productAPI = {
   getCategories: () => api.get('/products/categories'),
 };
 
+// Cart API
+export const cartAPI = {
+  getCart: () => api.get('/cart'),
+  addToCart: (data) => api.post('/cart/add', data),
+  updateQuantity: (cartItemId, quantity) => api.put(`/cart/items/${cartItemId}?quantity=${quantity}`),
+  removeItem: (cartItemId) => api.delete(`/cart/items/${cartItemId}`),
+  clearCart: () => api.delete('/cart/clear'),
+};
+
+// Order API
+export const orderAPI = {
+  placeOrder: (data) => api.post('/orders', data),
+  getUserOrders: () => api.get('/orders'),
+  getOrderById: (orderId) => api.get(`/orders/${orderId}`),
+  getAllOrders: () => api.get('/orders/admin/all'),
+  getOrdersByStatus: (status) => api.get(`/orders/admin/status/${status}`),
+  updateOrderStatus: (orderId, status) => api.put(`/orders/admin/${orderId}/status`, status),
+};
+
 // Admin Dashboard API
 export const adminAPI = {
   getDashboard: () => api.get('/admin/dashboard'),

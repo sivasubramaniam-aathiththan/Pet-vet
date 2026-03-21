@@ -19,6 +19,7 @@ public class ProductResponse {
     private String category;
     private String brand;
     private Double price;
+    private Integer stockQuantity;
     private Boolean isActive;
     private LocalDateTime createdAt;
 }
