@@ -16,21 +16,27 @@ public class Medication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String petId;
+
+    // Pet Info
+    private Long petId;
     private String petName;
 
-    private String drugName;
-    private String dosage; // e.g., "1 Tablet", "5 ml"
-    private String frequency; // e.g., "Twice a day", "Daily"
+    // Veterinarian who prescribed
+    private Long veterinarianId;
+    private String veterinarianName;
 
+    // Drug Details
+    private String drugName;
+    private String dosage;
+    private String frequency;
     private LocalDate startDate;
     private LocalDate endDate;
 
     // Drug Interaction Alerts
-    private String interactionAlerts; // Manual safety warnings
+    private String interactionAlerts;
 
     // Digital Prescription Handling
-    private String prescriptionRef; // Prescription note or document link
+    private String prescriptionRef;
 
     @JsonIgnore
     @Lob
@@ -39,7 +45,11 @@ public class Medication {
     private String prescriptionFileName;
     private String prescriptionFileType;
 
+    // Diagnostic Notes & Remarks
+    private String diagnosticNote;
+    private String remarks;
+
     // Compliance Monitoring
     private Integer totalDoses;
-    private Integer administeredDoses; // To calculate compliance percentage
+    private Integer administeredDoses;
 }

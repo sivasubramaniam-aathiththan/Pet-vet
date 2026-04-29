@@ -24,8 +24,12 @@ public class VaccinationService {
         return vaccinationRepository.findById(id).orElse(null);
     }
 
-    public List<Vaccination> getVaccinationsByPetId(String petId) {
+    public List<Vaccination> getVaccinationsByPetId(Long petId) {
         return vaccinationRepository.findByPetId(petId);
+    }
+
+    public List<Vaccination> getVaccinationsByVetId(Long vetId) {
+        return vaccinationRepository.findByVeterinarianId(vetId);
     }
 
     public Vaccination updateVaccination(Long id, Vaccination vaccinationDetails) {

@@ -1,0 +1,27 @@
+﻿
+C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend>FOR /F "usebackq tokens=1,2 delims==" %A IN ("C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend\\.mvn\wrapper\maven-wrapper.properties") DO (IF "%A" == "wrapperUrl" SET DOWNLOAD_URL=%B ) 
+
+C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend>(IF "distributionUrl" == "wrapperUrl" SET DOWNLOAD_URL=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.zip ) 
+
+C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend>(IF "wrapperUrl" == "wrapperUrl" SET DOWNLOAD_URL=https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.3.1/maven-wrapper-3.3.1.jar ) 
+
+C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend>"java.exe"      "--add-opens=java.base/java.lang=ALL-UNNAMED"   "--add-opens=java.base/java.io=ALL-UNNAMED"   "--add-opens=java.base/java.util=ALL-UNNAMED"   "--add-opens=java.base/java.net=ALL-UNNAMED"   "-Dmaven.multiModuleProjectDirectory=C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend\."   -classpath "C:\Users\USER\OneDrive\Desktop\PET_CARE_SYSTEM\backend\\.mvn\wrapper\maven-wrapper.jar"   org.apache.maven.wrapper.MavenWrapperMain spring-boot:run -Dspring-boot .run.arguments=--logging.level.org.springframework=DEBUG 
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.petcare:backend >-------------------------
+[INFO] Building backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.331 s
+[INFO] Finished at: 2026-03-21T10:27:35+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Unknown lifecycle phase ".run.arguments=--logging.level.org.springframework=DEBUG". You must specify a valid lifecycle phase or a goal in the format <plugin-prefix>:<goal> or <plugin-group-id>:<plugin-artifact-id>[:<plugin-version>]:<goal>. Available lifecycle phases are: pre-clean, clean, post-clean, validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy, pre-site, site, post-site, site-deploy. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/LifecyclePhaseNotFoundException

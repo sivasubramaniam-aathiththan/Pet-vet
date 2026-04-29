@@ -13,8 +13,13 @@ public class Vaccination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String petId;
+    private Long petId;
     private String petName;
+    
+    // Veterinarian who administered
+    private Long veterinarianId;
+    private String veterinarianName;
+    
     private String vaccineName;
     private LocalDate dateGiven;
     private LocalDate nextDueDate;

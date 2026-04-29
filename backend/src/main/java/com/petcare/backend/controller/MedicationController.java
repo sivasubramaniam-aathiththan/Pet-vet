@@ -13,20 +13,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/medications")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "http://localhost:3002"})
 public class MedicationController {
 
     @Autowired
     private MedicationService medicationService;
 
     @PostMapping
-    public ResponseEntity<Medication> addMedication(@RequestBody Medication medication) {
-        return ResponseEntity.ok(medicationService.addMedication(medication));
+    public Medication addMedication(@RequestBody Medication medication) {
+        return medicationService.addMedication(medication);
     }
 
     @GetMapping
-    public ResponseEntity<List<Medication>> getAllMedications() {
-        return ResponseEntity.ok(medicationService.getAllMedications());
+    public List<Medication> getAllMedications() {
+        return medicationService.getAllMedications();
     }
 
     @GetMapping("/{id}")
@@ -39,14 +39,18 @@ public class MedicationController {
     }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<List<Medication>> getMedicationsByPetId(@PathVariable String petId) {
-        return ResponseEntity.ok(medicationService.getMedicationsByPetId(petId));
+    public List<Medication> getMedicationsByPetId(@PathVariable Long petId) {
+        return medicationService.getMedicationsByPetId(petId);
+    }
+
+    @GetMapping("/vet/{vetId}")
+    public List<Medication> getMedicationsByVetId(@PathVariable Long vetId) {
+        return medicationService.getMedicationsByVetId(vetId);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Medication> updateMedication(@PathVariable Long id,
-            @RequestBody Medication medicationDetails) {
-        Medication updated = medicationService.updateMedication(id, medicationDetails);
+    public ResponseEntity<Medication> updateMedication(@PathVariable Long id, @RequestBody Medication medication) {
+        Medication updated = medicationService.updateMedication(id, medication);
         if (updated != null) {
             return ResponseEntity.ok(updated);
         }
@@ -67,7 +71,7 @@ public class MedicationController {
                 medication.setPrescriptionFile(file.getBytes());
                 medication.setPrescriptionFileName(file.getOriginalFilename());
                 medication.setPrescriptionFileType(file.getContentType());
-                medicationService.addMedication(medication); // Call save again
+                medicationService.addMedication(medication);
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.notFound().build();
